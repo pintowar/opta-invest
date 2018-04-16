@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+  <!--<environmentMode>FULL_ASSERT</environmentMode>-->
+
+  <!-- Domain model configuration -->
+  <solutionClass>com.github.invest.domain.InvestmentSolution</solutionClass>
+  <entityClass>com.github.invest.domain.AssetClassAllocation</entityClass>
+
+  <!-- Score configuration -->
+  <scoreDirectorFactory>
+    <!--<easyScoreCalculatorClass>com.github.invest.solver.score.InvestmentEasyScoreCalculator</easyScoreCalculatorClass>-->
+    <incrementalScoreCalculatorClass>com.github.invest.solver.score.InvestmentIncrementalScoreCalculator</incrementalScoreCalculatorClass>
+    <!--<scoreDrl>com/github/invest/investmentScoreRules.drl</scoreDrl>-->
+    <initializingScoreTrend>ONLY_DOWN/ANY</initializingScoreTrend>
+    <!--<assertionScoreDirectorFactory>-->
+      <!--<easyScoreCalculatorClass>com.github.invest.solver.score.InvestmentEasyScoreCalculator</easyScoreCalculatorClass>-->
+    <!--</assertionScoreDirectorFactory>-->
+  </scoreDirectorFactory>
+
+  <!-- Optimization algorithms configuration -->
+  <termination>
+    <secondsSpentLimit>30</secondsSpentLimit>
+  </termination>
+  <customPhase>
+    <customPhaseCommandClass>com.github.invest.solver.solution.initializer.InvestmentAllocationSolutionInitializer</customPhaseCommandClass>
+  </customPhase>
+  <localSearch>
+    <unionMoveSelector>
+      <moveIteratorFactory>
+        <moveIteratorFactoryClass>com.github.invest.solver.move.factory.InvestmentQuantityTransferMoveIteratorFactory</moveIteratorFactoryClass>
+      </moveIteratorFactory>
+      <moveIteratorFactory>
+        <moveIteratorFactoryClass>com.github.invest.solver.move.factory.InvestmentBiQuantityTransferMoveIteratorFactory</moveIteratorFactoryClass>
+      </moveIteratorFactory>
+    </unionMoveSelector>
+    <acceptor>
+      <lateAcceptanceSize>400</lateAcceptanceSize>
+    </acceptor>
+    <forager>
+      <acceptedCountLimit>1</acceptedCountLimit>
+    </forager>
+  </localSearch>
+</solver>

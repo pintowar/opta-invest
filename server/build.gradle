@@ -1,0 +1,44 @@
+plugins {
+    id "org.springframework.boot" version "2.0.1.RELEASE"
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    //id "com.gorylenko.gradle-git-properties" version "1.4.17"
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+
+bootJar {
+    archiveName = 'app.jar'
+}
+
+dependencies {
+    compile "org.optaplanner:optaplanner-core:7.7.0.Final"
+
+    compile "org.springframework.boot:spring-boot-actuator"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-webflux"
+    compile "org.springframework.boot:spring-boot-starter-websocket"
+    compile "org.springframework.boot:spring-boot-devtools"
+
+    compile "com.fasterxml.jackson.core:jackson-annotations"
+    compile "com.fasterxml.jackson.core:jackson-core"
+    compile "com.fasterxml.jackson.core:jackson-databind"
+//    runtime "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+//    runtime "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    runtime 'org.slf4j:jcl-over-slf4j:1.7.25'
+
+    compileOnly 'org.projectlombok:lombok:1.16.20'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+/*gitProperties {
+    dateFormat = "yyyy-MM-dd'T'HH:mmZ"
+    dateFormatTimeZone = "GMT"
+}*/

@@ -1,0 +1,490 @@
+[
+  {
+    "id": 1,
+    "name": "instance01",
+    "parametrization": {
+      "id": 0,
+      "standardDeviationMillisMaximum": 73
+    },
+    "regionList": [
+      {
+        "id": 0,
+        "name": "UK",
+        "quantityMillisMaximum": 180
+      },
+      {
+        "id": 1,
+        "name": "Global",
+        "quantityMillisMaximum": 1000
+      }
+    ],
+    "sectorList": [
+      {
+        "id": 0,
+        "name": "Equities",
+        "quantityMillisMaximum": 400
+      },
+      {
+        "id": 1,
+        "name": "Bonds",
+        "quantityMillisMaximum": 1000
+      },
+      {
+        "id": 2,
+        "name": "Real Estate",
+        "quantityMillisMaximum": 1000
+      }
+    ],
+    "assetClassList": [
+      {
+        "id": 1,
+        "name": "UK Equities",
+        "regionId": 0,
+        "sectorId": 0,
+        "expectedReturnMillis": 100,
+        "standardDeviationRiskMillis": 150,
+        "correlationMillisMap": {
+          "1-UK Equities": 1000,
+          "2-Ex-UK Equities": 0,
+          "3-Intermediate Bonds": 0,
+          "4-Long-Term Bonds": 0,
+          "5-UK Bonds": 0,
+          "6-Real Estate": 0
+        }
+      },
+      {
+        "id": 2,
+        "name": "Ex-UK Equities",
+        "regionId": 1,
+        "sectorId": 0,
+        "expectedReturnMillis": 80,
+        "standardDeviationRiskMillis": 120,
+        "correlationMillisMap": {
+          "1-UK Equities": 760,
+          "2-Ex-UK Equities": 1000,
+          "3-Intermediate Bonds": 0,
+          "4-Long-Term Bonds": 0,
+          "5-UK Bonds": 0,
+          "6-Real Estate": 0
+        }
+      },
+      {
+        "id": 3,
+        "name": "Intermediate Bonds",
+        "regionId": 1,
+        "sectorId": 1,
+        "expectedReturnMillis": 40,
+        "standardDeviationRiskMillis": 70,
+        "correlationMillisMap": {
+          "1-UK Equities": 350,
+          "2-Ex-UK Equities": 40,
+          "3-Intermediate Bonds": 1000,
+          "4-Long-Term Bonds": 0,
+          "5-UK Bonds": 0,
+          "6-Real Estate": 0
+        }
+      },
+      {
+        "id": 4,
+        "name": "Long-Term Bonds",
+        "regionId": 1,
+        "sectorId": 1,
+        "expectedReturnMillis": 45,
+        "standardDeviationRiskMillis": 80,
+        "correlationMillisMap": {
+          "1-UK Equities": 500,
+          "2-Ex-UK Equities": 300,
+          "3-Intermediate Bonds": 870,
+          "4-Long-Term Bonds": 1000,
+          "5-UK Bonds": 0,
+          "6-Real Estate": 0
+        }
+      },
+      {
+        "id": 5,
+        "name": "UK Bonds",
+        "regionId": 0,
+        "sectorId": 1,
+        "expectedReturnMillis": 50,
+        "standardDeviationRiskMillis": 90,
+        "correlationMillisMap": {
+          "1-UK Equities": 240,
+          "2-Ex-UK Equities": 360,
+          "3-Intermediate Bonds": 620,
+          "4-Long-Term Bonds": 520,
+          "5-UK Bonds": 1000,
+          "6-Real Estate": 0
+        }
+      },
+      {
+        "id": 6,
+        "name": "Real Estate",
+        "regionId": 1,
+        "sectorId": 2,
+        "expectedReturnMillis": 70,
+        "standardDeviationRiskMillis": 100,
+        "correlationMillisMap": {
+          "1-UK Equities": 300,
+          "2-Ex-UK Equities": 250,
+          "3-Intermediate Bonds": -50,
+          "4-Long-Term Bonds": -20,
+          "5-UK Bonds": 200,
+          "6-Real Estate": 1000
+        }
+      }
+    ],
+    "assetClassAllocationList": [
+      {
+        "id": 1,
+        "assetClassId": 1,
+        "quantityMillis": null
+      },
+      {
+        "id": 2,
+        "assetClassId": 2,
+        "quantityMillis": null
+      },
+      {
+        "id": 3,
+        "assetClassId": 3,
+        "quantityMillis": null
+      },
+      {
+        "id": 4,
+        "assetClassId": 4,
+        "quantityMillis": null
+      },
+      {
+        "id": 5,
+        "assetClassId": 5,
+        "quantityMillis": null
+      },
+      {
+        "id": 6,
+        "assetClassId": 6,
+        "quantityMillis": null
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "instance02",
+    "parametrization": {
+      "id": 0,
+      "standardDeviationMillisMaximum": 150
+    },
+    "regionList": [
+      {
+        "id": 0,
+        "name": "Global",
+        "quantityMillisMaximum": 1000
+      }
+    ],
+    "sectorList": [
+      {
+        "id": 0,
+        "name": "Tech",
+        "quantityMillisMaximum": 300
+      },
+      {
+        "id": 1,
+        "name": "Cars",
+        "quantityMillisMaximum": 1000
+      },
+      {
+        "id": 2,
+        "name": "Food",
+        "quantityMillisMaximum": 400
+      }
+    ],
+    "assetClassList": [
+      {
+        "id": 1,
+        "name": "Red Hat, Inc.",
+        "regionId": 0,
+        "sectorId": 0,
+        "expectedReturnMillis": 136,
+        "standardDeviationRiskMillis": 291,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 0,
+          "2-Google Inc.": 50,
+          "3-Oracle Corporation": 600,
+          "4-Apple Inc.": 130,
+          "5-Microsoft Corporation": 140,
+          "6-Tesla Motors, Inc.": 230,
+          "7-Ford Motor Company": 210,
+          "8-Toyota Motor Corp Ltd Ord": 80,
+          "9-General Motors Company": 320,
+          "10-Starbucks Corporation": 330,
+          "11-McDonald\"s Corporation": 0
+        }
+      },
+      {
+        "id": 2,
+        "name": "Google Inc.",
+        "regionId": 0,
+        "sectorId": 0,
+        "expectedReturnMillis": 156,
+        "standardDeviationRiskMillis": 215,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 50,
+          "2-Google Inc.": 0,
+          "3-Oracle Corporation": 50,
+          "4-Apple Inc.": 260,
+          "5-Microsoft Corporation": 180,
+          "6-Tesla Motors, Inc.": 100,
+          "7-Ford Motor Company": 80,
+          "8-Toyota Motor Corp Ltd Ord": 200,
+          "9-General Motors Company": 210,
+          "10-Starbucks Corporation": 210,
+          "11-McDonald\"s Corporation": 210
+        }
+      },
+      {
+        "id": 3,
+        "name": "Oracle Corporation",
+        "regionId": 0,
+        "sectorId": 0,
+        "expectedReturnMillis": 123,
+        "standardDeviationRiskMillis": 217,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 600,
+          "2-Google Inc.": 50,
+          "3-Oracle Corporation": 0,
+          "4-Apple Inc.": 190,
+          "5-Microsoft Corporation": 330,
+          "6-Tesla Motors, Inc.": 140,
+          "7-Ford Motor Company": 420,
+          "8-Toyota Motor Corp Ltd Ord": 190,
+          "9-General Motors Company": 500,
+          "10-Starbucks Corporation": 170,
+          "11-McDonald\"s Corporation": -10
+        }
+      },
+      {
+        "id": 4,
+        "name": "Apple Inc.",
+        "regionId": 0,
+        "sectorId": 0,
+        "expectedReturnMillis": 288,
+        "standardDeviationRiskMillis": 241,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 130,
+          "2-Google Inc.": 260,
+          "3-Oracle Corporation": 190,
+          "4-Apple Inc.": 0,
+          "5-Microsoft Corporation": 270,
+          "6-Tesla Motors, Inc.": 10,
+          "7-Ford Motor Company": 150,
+          "8-Toyota Motor Corp Ltd Ord": 180,
+          "9-General Motors Company": 250,
+          "10-Starbucks Corporation": 230,
+          "11-McDonald\"s Corporation": 30
+        }
+      },
+      {
+        "id": 5,
+        "name": "Microsoft Corporation",
+        "regionId": 0,
+        "sectorId": 0,
+        "expectedReturnMillis": 179,
+        "standardDeviationRiskMillis": 207,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 140,
+          "2-Google Inc.": 180,
+          "3-Oracle Corporation": 330,
+          "4-Apple Inc.": 270,
+          "5-Microsoft Corporation": 0,
+          "6-Tesla Motors, Inc.": 180,
+          "7-Ford Motor Company": 290,
+          "8-Toyota Motor Corp Ltd Ord": 250,
+          "9-General Motors Company": 320,
+          "10-Starbucks Corporation": 170,
+          "11-McDonald\"s Corporation": 160
+        }
+      },
+      {
+        "id": 6,
+        "name": "Tesla Motors, Inc.",
+        "regionId": 0,
+        "sectorId": 1,
+        "expectedReturnMillis": 547,
+        "standardDeviationRiskMillis": 539,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 230,
+          "2-Google Inc.": 100,
+          "3-Oracle Corporation": 140,
+          "4-Apple Inc.": 10,
+          "5-Microsoft Corporation": 180,
+          "6-Tesla Motors, Inc.": 0,
+          "7-Ford Motor Company": 320,
+          "8-Toyota Motor Corp Ltd Ord": 160,
+          "9-General Motors Company": 230,
+          "10-Starbucks Corporation": 240,
+          "11-McDonald\"s Corporation": -50
+        }
+      },
+      {
+        "id": 7,
+        "name": "Ford Motor Company",
+        "regionId": 0,
+        "sectorId": 1,
+        "expectedReturnMillis": 10,
+        "standardDeviationRiskMillis": 259,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 210,
+          "2-Google Inc.": 80,
+          "3-Oracle Corporation": 420,
+          "4-Apple Inc.": 150,
+          "5-Microsoft Corporation": 290,
+          "6-Tesla Motors, Inc.": 320,
+          "7-Ford Motor Company": 0,
+          "8-Toyota Motor Corp Ltd Ord": 240,
+          "9-General Motors Company": 830,
+          "10-Starbucks Corporation": 360,
+          "11-McDonald\"s Corporation": 100
+        }
+      },
+      {
+        "id": 8,
+        "name": "Toyota Motor Corp Ltd Ord",
+        "regionId": 0,
+        "sectorId": 1,
+        "expectedReturnMillis": 136,
+        "standardDeviationRiskMillis": 192,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 80,
+          "2-Google Inc.": 200,
+          "3-Oracle Corporation": 190,
+          "4-Apple Inc.": 180,
+          "5-Microsoft Corporation": 250,
+          "6-Tesla Motors, Inc.": 160,
+          "7-Ford Motor Company": 240,
+          "8-Toyota Motor Corp Ltd Ord": 0,
+          "9-General Motors Company": 360,
+          "10-Starbucks Corporation": 320,
+          "11-McDonald\"s Corporation": 100
+        }
+      },
+      {
+        "id": 9,
+        "name": "General Motors Company",
+        "regionId": 0,
+        "sectorId": 1,
+        "expectedReturnMillis": 21,
+        "standardDeviationRiskMillis": 295,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 320,
+          "2-Google Inc.": 210,
+          "3-Oracle Corporation": 500,
+          "4-Apple Inc.": 250,
+          "5-Microsoft Corporation": 320,
+          "6-Tesla Motors, Inc.": 230,
+          "7-Ford Motor Company": 830,
+          "8-Toyota Motor Corp Ltd Ord": 360,
+          "9-General Motors Company": 0,
+          "10-Starbucks Corporation": 300,
+          "11-McDonald\"s Corporation": 90
+        }
+      },
+      {
+        "id": 10,
+        "name": "Starbucks Corporation",
+        "regionId": 0,
+        "sectorId": 2,
+        "expectedReturnMillis": 332,
+        "standardDeviationRiskMillis": 197,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 330,
+          "2-Google Inc.": 210,
+          "3-Oracle Corporation": 170,
+          "4-Apple Inc.": 230,
+          "5-Microsoft Corporation": 170,
+          "6-Tesla Motors, Inc.": 240,
+          "7-Ford Motor Company": 360,
+          "8-Toyota Motor Corp Ltd Ord": 320,
+          "9-General Motors Company": 300,
+          "10-Starbucks Corporation": 0,
+          "11-McDonald\"s Corporation": 310
+        }
+      },
+      {
+        "id": 11,
+        "name": "McDonald\"s Corporation",
+        "regionId": 0,
+        "sectorId": 2,
+        "expectedReturnMillis": 80,
+        "standardDeviationRiskMillis": 113,
+        "correlationMillisMap": {
+          "1-Red Hat, Inc.": 0,
+          "2-Google Inc.": 210,
+          "3-Oracle Corporation": -10,
+          "4-Apple Inc.": 30,
+          "5-Microsoft Corporation": 160,
+          "6-Tesla Motors, Inc.": -50,
+          "7-Ford Motor Company": 100,
+          "8-Toyota Motor Corp Ltd Ord": 100,
+          "9-General Motors Company": 90,
+          "10-Starbucks Corporation": 310,
+          "11-McDonald\"s Corporation": 0
+        }
+      }
+    ],
+    "assetClassAllocationList": [
+      {
+        "id": 1,
+        "assetClassId": 1,
+        "quantityMillis": null
+      },
+      {
+        "id": 2,
+        "assetClassId": 2,
+        "quantityMillis": null
+      },
+      {
+        "id": 3,
+        "assetClassId": 3,
+        "quantityMillis": null
+      },
+      {
+        "id": 4,
+        "assetClassId": 4,
+        "quantityMillis": null
+      },
+      {
+        "id": 5,
+        "assetClassId": 5,
+        "quantityMillis": null
+      },
+      {
+        "id": 6,
+        "assetClassId": 6,
+        "quantityMillis": null
+      },
+      {
+        "id": 7,
+        "assetClassId": 7,
+        "quantityMillis": null
+      },
+      {
+        "id": 8,
+        "assetClassId": 8
+      },
+      {
+        "id": 9,
+        "assetClassId": 9,
+        "quantityMillis": null
+      },
+      {
+        "id": 10,
+        "assetClassId": 10,
+        "quantityMillis": null
+      },
+      {
+        "id": 11,
+        "assetClassId": 11,
+        "quantityMillis": null
+      }
+    ]
+  }
+]
