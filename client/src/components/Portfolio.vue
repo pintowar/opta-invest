@@ -79,11 +79,10 @@ export default {
       client.subscribe('/user/queue/solution', message => {
         const data = JSON.parse(message.body)
         self.allocations = data.map(e => ({asset: e.assetClass.name, quantityMillis: e.quantityMillis}))
-        console.log(data)
       })
     })
 
-    axios.get(`/api/portfolio/${this.portfolioId}.json`).then(res => {
+    axios.get(`/api/portfolio/${this.portfolioId}`).then(res => {
       this.portfolio = res.data
       this.title = `Portfolio ${res.data.name}`
       this.regions = res.data.regionList
