@@ -31,7 +31,7 @@ export default {
     }
   },
   mounted () {
-    axios.get('/api/portfolios').then(res => {
+    axios.get('/api/portfolios.json').then(res => {
       this.items = res.data.map(e => ({id: e.id, name: e.name}))
     }, error => {
       console.error(error)

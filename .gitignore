@@ -37,7 +37,11 @@ out/
 /build/
 /server/build/
 /client/dist/
-node_modules/
+/client/node_modules/
+/client/npm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
+/client/test/unit/coverage
 
 # Ignore Gradle GUI config
 gradle-app.setting

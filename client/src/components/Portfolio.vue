@@ -52,8 +52,8 @@
 
 <script>
 import axios from 'axios'
-import SockJS from 'sockjs-client'
-import Stomp from 'stompjs'
+//import SockJS from 'sockjs-client'
+//import Stomp from 'stompjs'
 
 export default {
   name: 'portfolio',
@@ -70,7 +70,7 @@ export default {
   created () {
     this.portfolioId = this.$route.params.id
 
-    const socket = new SockJS('/stomp')
+    /*const socket = new SockJS('/stomp')
     const client = Stomp.over(socket)
     client.debug = null
     let self = this
@@ -81,9 +81,9 @@ export default {
         self.allocations = data.map(e => ({asset: e.assetClass.name, quantityMillis: e.quantityMillis}))
         console.log(data)
       })
-    })
+    })*/
 
-    axios.get(`/api/portfolio/${this.portfolioId}`).then(res => {
+    axios.get(`/api/portfolio/${this.portfolioId}.json`).then(res => {
       this.portfolio = res.data
       this.title = `Portfolio ${res.data.name}`
       this.regions = res.data.regionList
@@ -117,11 +117,7 @@ export default {
     allocateAssets (evt) {
       const url = `/api/portfolio/${this.portfolioId}/async-allocate`
       console.log(url)
-      axios({
-        method: 'post',
-        url: url,
-        data: this.portfolio,
-        headers: { 'content-type': 'application/json', 'accept': 'application/stream+json' }})
+      axios.post(url, this.portfolio)
       .then(res => {
         console.log(res.data)
       }, error => {
