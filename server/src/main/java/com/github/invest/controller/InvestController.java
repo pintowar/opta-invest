@@ -43,13 +43,13 @@ public class InvestController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping(value = "/api/portfolio/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<InvestmentSolutionDTO> portfolio(@PathVariable("id") Long id) throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("./portfolios.json");
-        List<InvestmentSolutionDTO> dtos = mapper.readValue(in, new TypeReference<List<InvestmentSolutionDTO>>() {});
-        Optional<InvestmentSolutionDTO> resp = dtos.stream().filter(it -> id.equals(it.getId())).findFirst();
-        return resp.map(Mono::just).orElseGet(Mono::empty);
-    }
+//    @GetMapping(value = "/api/portfolio/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public Mono<InvestmentSolutionDTO> portfolio(@PathVariable("id") Long id) throws IOException {
+//        InputStream in = this.getClass().getClassLoader().getResourceAsStream("./portfolios.json");
+//        List<InvestmentSolutionDTO> dtos = mapper.readValue(in, new TypeReference<List<InvestmentSolutionDTO>>() {});
+//        Optional<InvestmentSolutionDTO> resp = dtos.stream().filter(it -> id.equals(it.getId())).findFirst();
+//        return resp.map(Mono::just).orElseGet(Mono::empty);
+//    }
 
     @PostMapping(value = "/api/portfolio/{id}/allocate", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_STREAM_JSON_VALUE)

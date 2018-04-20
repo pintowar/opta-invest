@@ -52,8 +52,8 @@
 
 <script>
 import axios from 'axios'
-//import SockJS from 'sockjs-client'
-//import Stomp from 'stompjs'
+import SockJS from 'sockjs-client'
+import Stomp from 'stompjs'
 
 export default {
   name: 'portfolio',
@@ -70,7 +70,7 @@ export default {
   created () {
     this.portfolioId = this.$route.params.id
 
-    /*const socket = new SockJS('/stomp')
+    const socket = new SockJS('/stomp')
     const client = Stomp.over(socket)
     client.debug = null
     let self = this
@@ -81,7 +81,7 @@ export default {
         self.allocations = data.map(e => ({asset: e.assetClass.name, quantityMillis: e.quantityMillis}))
         console.log(data)
       })
-    })*/
+    })
 
     axios.get(`/api/portfolio/${this.portfolioId}.json`).then(res => {
       this.portfolio = res.data
