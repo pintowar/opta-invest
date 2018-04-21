@@ -5,10 +5,10 @@
     </b-row>
     <b-row>
       <b-col cols="6">
-        <b-table striped hover :items="regions"></b-table>
+        <b-table striped hover :items="regions" :fields="fields"></b-table>
       </b-col>
       <b-col cols="6">
-        <b-table striped hover :items="sectors"></b-table>
+        <b-table striped hover :items="sectors" :fields="fields"></b-table>
       </b-col>
     </b-row>
     <b-row>
@@ -23,6 +23,11 @@
 export default {
   name: 'assets',
   props: ['title', 'portfolio'],
+  data () {
+    return {
+      fields: ['id', 'name', 'quantityMaximumLabel']
+    }
+  },
   computed: {
     regions () {
       return this.portfolio ? this.portfolio.regionList : []

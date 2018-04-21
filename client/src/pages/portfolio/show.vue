@@ -40,12 +40,12 @@ export default {
     this.portfolioId = this.$route.params.id
 
     const socket = new SockJS('/stomp')
-    const client = Stomp.over(socket)
-    client.debug = null
+    this.client = Stomp.over(socket)
+    this.client.debug = null
     let self = this
-    client.connect({}, frame => {
+    this.client.connect({}, frame => {
       console.log('Connected: ' + frame)
-      client.subscribe('/user/queue/solution', message => {
+      self.client.subscribe('/user/queue/solution', message => {
         const data = JSON.parse(message.body)
         console.log(data)
         self.rtAllocations = data.map(e => ({asset: e.assetClass.name, quantityMillis: e.quantityMillis, quantityLabel: e.quantityLabel}))
@@ -58,6 +58,9 @@ export default {
     }, error => {
       console.error(error)
     })
+  },
+  beforeDestroy () {
+    this.client.disconnect()
   }
 }
 </script>

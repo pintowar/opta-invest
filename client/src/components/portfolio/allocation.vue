@@ -15,20 +15,31 @@
     </b-row>
     <b-row>
       <b-col cols="6">
-        <b-table striped hover :items="allocations"></b-table>
+        <b-table striped hover :items="allocations" :fields="tableFields"></b-table>
       </b-col>
       <b-col cols="6">
+          <allocation-chart :chart-data="chartAllocations"/>
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
+import Rainbow from 'color-rainbow'
 import axios from 'axios'
+import AllocationChart from '@/components/portfolio/chart.vue'
 
 export default {
   name: 'allocation',
   props: ['title', 'portfolio', 'rtAllocations'],
+  components: {
+    'allocation-chart': AllocationChart
+  },
+  data () {
+    return {
+      tableFields: ['asset', 'quantityLabel']
+    }
+  },
   computed: {
     parametrization () {
       return ((this.portfolio || {}).parametrization || {}).standardDeviationMillisMaximum
@@ -43,6 +54,16 @@ export default {
         quantityLabel: e.quantityLabel ? e.quantityLabel : '0.0%'}))
 
       return this.rtAllocations.length === 0 ? initialAssets : this.rtAllocations
+    },
+    chartAllocations () {
+      const colors = Rainbow.create(this.allocations.length).map(c => `rgb(${c.values.rgb.join(', ')})`)
+      return {
+        labels: this.allocations.map(e => e.asset),
+        datasets: [{
+          backgroundColor: colors,
+          data: this.allocations.map(e => e.quantityMillis)
+        }]
+      }
     }
   },
   methods: {
@@ -60,9 +81,6 @@ export default {
     },
     destroySolution (evt) {
 
-    },
-    coiso (data) {
-      console.log(data)
     }
   }
 }
