@@ -10,6 +10,8 @@ import com.github.invest.service.SolverStatus;
 import com.github.invest.service.impl.SolverService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,11 @@ public class InvestController {
     private InvestmentRepository investmentRepository;
     private ObjectMapper mapper;
 
+    private Resource resource = new ClassPathResource("./portfolios.json");
+    private TypeReference<List<InvestmentSolutionDTO>> investmentRef = new TypeReference<List<InvestmentSolutionDTO>>() {
+    };
+
+
     public InvestController(SolverService solverService, InvestmentRepository investmentRepository,
                             ObjectMapper mapper) {
         this.solverService = solverService;
@@ -38,9 +45,7 @@ public class InvestController {
 
     @GetMapping(value = "/api/portfolios", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<InvestmentSolutionDTO>> portfolios() throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("./portfolios.json");
-        List<InvestmentSolutionDTO> dtos = mapper.readValue(in, new TypeReference<List<InvestmentSolutionDTO>>() {
-        });
+        List<InvestmentSolutionDTO> dtos = mapper.readValue(resource.getInputStream(), investmentRef);
         return ResponseEntity.ok(dtos);
     }
 
@@ -52,9 +57,7 @@ public class InvestController {
             log.info("Found current solution if id {}", invest.getId());
             return Mono.just(InvestmentStatusDTO.of(status, invest.toDTO()));
         } else {
-            InputStream in = this.getClass().getClassLoader().getResourceAsStream("./portfolios.json");
-            List<InvestmentSolutionDTO> dtos = mapper.readValue(in, new TypeReference<List<InvestmentSolutionDTO>>() {
-            });
+            List<InvestmentSolutionDTO> dtos = mapper.readValue(resource.getInputStream(), investmentRef);
             Optional<InvestmentStatusDTO> resp = dtos.stream().filter(it -> id.equals(it.getId()))
                     .map(it -> InvestmentStatusDTO.of(status, it)).findFirst();
             return resp.map(Mono::just).orElseGet(Mono::empty);

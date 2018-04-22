@@ -73,6 +73,7 @@ export default {
       const url = `/api/portfolio/${this.portfolio.id}/async-allocate`
       axios.post(url, this.portfolio)
       .then(res => {
+        this.status = res.data
         console.log(res.data)
       }, error => {
         console.error(error)
