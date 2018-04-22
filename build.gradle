@@ -55,7 +55,7 @@ task(":server:assemble").mustRunAfter(copyClientResources)
 
 docker {
     name "pintowar/opta-invest:${project(":server").version}"
-    tags project(":server").version, 'latest'
+    tags 'latest'
     dependsOn tasks.assembleServerAndClient
     files "$rootDir/build/$jarFileName"
 }
