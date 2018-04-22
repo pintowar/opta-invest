@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "instance01",
+    "name": "irrinki_1",
     "parametrization": {
       "id": 0,
       "standardDeviationMillisMaximum": 73
@@ -169,7 +169,7 @@
   },
   {
     "id": 2,
-    "name": "instance02",
+    "name": "de_smet_1",
     "parametrization": {
       "id": 0,
       "standardDeviationMillisMaximum": 150

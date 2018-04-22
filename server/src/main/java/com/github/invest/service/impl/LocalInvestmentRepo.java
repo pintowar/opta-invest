@@ -35,7 +35,9 @@ public class LocalInvestmentRepo implements InvestmentRepository {
 
     @Override
     public SolverStatus getStatusByInvestmentId(Long investmentId) {
-        return investmentIdToSolverStateMap.get(investmentId);
+        SolverStatus status = investmentIdToSolverStateMap.get(investmentId);
+        if (status != null) return status;
+        else return SolverStatus.NONE;
     }
 
     @Override

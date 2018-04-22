@@ -45,8 +45,8 @@ export default {
         name: e.name,
         region: regionsId[e.regionId].name,
         sector: sectorsId[e.sectorId].name,
-        expectedReturnMillis: e.expectedReturnMillis,
-        standardDeviationRiskMillis: e.standardDeviationRiskMillis}))
+        expectedReturnLabel: e.expectedReturnLabel,
+        standardDeviationRiskLabel: e.standardDeviationRiskLabel}))
     }
   }
 }

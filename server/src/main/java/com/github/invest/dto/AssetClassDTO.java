@@ -3,6 +3,7 @@ package com.github.invest.dto;
 import com.github.invest.domain.AssetClass;
 import com.github.invest.domain.Region;
 import com.github.invest.domain.Sector;
+import com.github.invest.domain.util.InvestmentNumericUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 public class AssetClassDTO {
 
     private Long id;
@@ -23,6 +24,14 @@ public class AssetClassDTO {
     private long standardDeviationRiskMillis;
 
     private Map<String, Long> correlationMillisMap;
+
+    public String getExpectedReturnLabel() {
+        return InvestmentNumericUtil.formatMillisAsPercentage(expectedReturnMillis);
+    }
+
+    public String getStandardDeviationRiskLabel() {
+        return InvestmentNumericUtil.formatMillisAsPercentage(standardDeviationRiskMillis);
+    }
 
     public AssetClass toAssetClass(Map<Long, Region> regionList, Map<Long, Sector> sectorList) {
         return AssetClass.of(id, name, regionList.get(regionId), sectorList.get(sectorId), expectedReturnMillis,

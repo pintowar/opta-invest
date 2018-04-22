@@ -65,39 +65,46 @@ public class SolverService {
         }
     }
 
+    public void terminateAndClean(Long investmentId) {
+        terminate(investmentId);
+        investmentRepository.terminateAndCleanByInvestmentId(investmentId);
+    }
+
     public Flux<ImmutablePair<Long, String>> solve(InvestmentSolution investment) {
-        val flux = Flux.<ImmutablePair<Long, String>>create(emmiter -> {
+        val flux = Flux.<ImmutablePair<Long, String>>create(emitter -> {
             Solver<InvestmentSolution> solver = solverFactory.buildSolver();
             solver.addEventListener(event -> {
                 if (event.isEveryProblemFactChangeProcessed()) {
                     log.info("New best solution found for investment id ({}) is {}.", investment.getId(),
                             event.getNewBestScore());
-                    emmiter.next(ImmutablePair.of(investment.getId(), event.getNewBestScore().toString()));
+                    emitter.next(ImmutablePair.of(investment.getId(), event.getNewBestScore().toString()));
                 }
             });
             solver.solve(investment);
-            emmiter.complete();
+            emitter.complete();
         }, FluxSink.OverflowStrategy.LATEST).subscribeOn(Schedulers.fromExecutor(executor));
 
         return flux.sample(Duration.ofSeconds(1));
     }
 
     @Async
-    public void asyncSolve(String sessionId, InvestmentSolution investment) {
+    public void asyncSolve(InvestmentSolution investment) {
         Long investmentId = investment.getId();
         Solver<InvestmentSolution> solver = solverFactory.buildSolver();
         investmentRepository.associateSolverToInvestmentId(investmentId, solver);
+        InvestmentSolution sol = null;
         solver.addEventListener(event -> {
             if (event.isEveryProblemFactChangeProcessed()) {
-                notificationService.notifyInvestmentChange(sessionId, event.getNewBestSolution());
+                notificationService.notifyInvestmentChange(event.getNewBestSolution());
             }
         });
 
         try {
             investmentRepository.solveStatusForInvestmentId(investmentId);
-            solver.solve(investment);
+            sol = solver.solve(investment);
         } finally {
             investmentRepository.terminateAndCleanByInvestmentId(investmentId);
+            notificationService.notifyInvestmentChange(sol);
         }
     }
 

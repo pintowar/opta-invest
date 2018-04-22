@@ -17,6 +17,9 @@
 package com.github.invest.domain;
 
 import com.github.invest.domain.util.InvestmentNumericUtil;
+import com.github.invest.dto.AssetClassAllocationDTO;
+import com.github.invest.dto.AssetClassDTO;
+import com.github.invest.dto.InvestmentSolutionDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,9 +34,11 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeFactory;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @PlanningSolution
@@ -43,6 +48,7 @@ public class InvestmentSolution {
 
     @PlanningId
     private Long id;
+    private String name;
     @ProblemFactProperty
     private InvestmentParametrization parametrization;
     @ProblemFactCollectionProperty
@@ -133,6 +139,14 @@ public class InvestmentSolution {
             }
         }
         return totalMap;
+    }
+
+    public InvestmentSolutionDTO toDTO() {
+        List<AssetClassDTO> assets = assetClassList.stream().map(AssetClass::toDTO).collect(Collectors.toList());
+        List<AssetClassAllocationDTO> allocations = assetClassAllocationList.stream().map(AssetClassAllocation::toDTO)
+                .collect(Collectors.toList());
+        return InvestmentSolutionDTO.of(id, name, parametrization, regionList, sectorList, assets, allocations,
+                calculateExpectedReturnMicros(), calculateStandardDeviationMicros());
     }
 
 }

@@ -17,6 +17,7 @@
 package com.github.invest.domain;
 
 import com.github.invest.domain.util.InvestmentNumericUtil;
+import com.github.invest.dto.AssetClassAllocationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -76,13 +77,6 @@ public class AssetClassAllocation {
         return quantityMillis * assetClass.getStandardDeviationRiskMillis();
     }
 
-    public String getQuantityLabel() {
-        if (quantityMillis == null) {
-            return "";
-        }
-        return InvestmentNumericUtil.formatMillisAsPercentage(quantityMillis);
-    }
-
     public String getLabel() {
         return assetClass.getName();
     }
@@ -90,6 +84,10 @@ public class AssetClassAllocation {
     @Override
     public String toString() {
         return assetClass.toString();
+    }
+
+    public AssetClassAllocationDTO toDTO() {
+        return AssetClassAllocationDTO.of(id, assetClass.getId(), quantityMillis);
     }
 
 }

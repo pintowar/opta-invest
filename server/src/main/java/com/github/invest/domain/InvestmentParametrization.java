@@ -16,6 +16,7 @@
 
 package com.github.invest.domain;
 
+import com.github.invest.domain.util.InvestmentNumericUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,10 @@ public class InvestmentParametrization {
     private Long id;
 
     private long standardDeviationMillisMaximum; // In millis (so multiplied by 1000)
+
+    public String getStandardDeviationMaximumLabel() {
+        return InvestmentNumericUtil.formatMillisAsPercentage(standardDeviationMillisMaximum);
+    }
 
     // ************************************************************************
     // Complex methods

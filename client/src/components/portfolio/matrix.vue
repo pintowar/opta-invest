@@ -21,7 +21,12 @@ export default {
       if (assetClassList != null) {
         return assetClassList.map(e => {
           const corr = e.correlationMillisMap
-          return {name: e.name, ...corr}
+          const newCorr = Object.keys(corr).reduce((acc, e) => {
+            const key = e.split('-').slice(1, corr[e].lentgh).join('-')
+            acc[key] = corr[e] / 1000.0
+            return acc
+          }, {})
+          return {name: e.name, ...newCorr}
         })
       } else return []
     }

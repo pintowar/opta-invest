@@ -2,7 +2,7 @@
   <b-card no-body>
     <b-tabs card>
       <b-tab title="Allocation" active>
-        <allocation :title="title" :portfolio="portfolio" :rt-allocations="rtAllocations"/>
+        <allocation :title="title" :portfolio="portfolio" :status="status"/>
       </b-tab>
       <b-tab title="Info">
         <assets :title="title" :portfolio="portfolio" />
@@ -28,7 +28,8 @@ export default {
     return {
       title: 'Portfolio ' + this.$route.params.id,
       rtAllocations: [],
-      portfolio: {}
+      portfolio: {},
+      status: 'NONE'
     }
   },
   components: {
@@ -37,7 +38,7 @@ export default {
     'allocation': Allocation
   },
   created () {
-    this.portfolioId = this.$route.params.id
+    this.portfolioId = Number(this.$route.params.id)
 
     const socket = new SockJS('/stomp')
     this.client = Stomp.over(socket)
@@ -45,16 +46,20 @@ export default {
     let self = this
     this.client.connect({}, frame => {
       console.log('Connected: ' + frame)
-      self.client.subscribe('/user/queue/solution', message => {
+      self.client.subscribe('/topic/solution', message => {
         const data = JSON.parse(message.body)
-        console.log(data)
-        self.rtAllocations = data.map(e => ({asset: e.assetClass.name, quantityMillis: e.quantityMillis, quantityLabel: e.quantityLabel}))
+        // console.log(data.status)
+        if (data.id === this.portfolioId) {
+          self.status = data.status
+          self.portfolio = data.portfolio
+        }
       })
     })
 
     axios.get(`/api/portfolio/${this.portfolioId}`).then(res => {
-      this.portfolio = res.data
-      this.title = `Portfolio ${res.data.name}`
+      this.status = res.data.status
+      this.portfolio = res.data.investment
+      this.title = `Portfolio ${this.portfolio.name}`
     }, error => {
       console.error(error)
     })

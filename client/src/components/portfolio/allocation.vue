@@ -6,16 +6,18 @@
     <b-row>
       <b-form>
         <b-button size="sm" variant="success" @click="allocateAssets">Allocate Assets</b-button>
-        <b-button size="sm" variant="warning" @click="terminateAllocation">Terminate Allocation</b-button>
-        <b-button size="sm" variant="danger" @click="destroySolution">Destroy</b-button>
+        <b-button size="sm" variant="danger" @click="terminateAllocation">Terminate Allocation</b-button>
+        <b-badge pill variant="primary">{{ status }}</b-badge>
       </b-form>
     </b-row>
     <b-row>
-      <p>Maximum Standard Deviation: {{ parametrization }}</p>
-    </b-row>
-    <b-row>
       <b-col cols="6">
-        <b-table striped hover :items="allocations" :fields="tableFields"></b-table>
+        <p>Maximum Standard Deviation: <b>{{ parametrization }}</b></p>
+        <b-table striped hover :items="allocations" :fields="tableFields"/>
+        <p>
+          Expected Return: <b>{{ (portfolio || {}).expectedReturnLabel }}</b>,
+          Standard Deviation Risk: <b>{{ (portfolio || {}).standardDeviationLabel }}</b>
+        </p>
       </b-col>
       <b-col cols="6">
           <allocation-chart :chart-data="chartAllocations"/>
@@ -31,29 +33,29 @@ import AllocationChart from '@/components/portfolio/chart.vue'
 
 export default {
   name: 'allocation',
-  props: ['title', 'portfolio', 'rtAllocations'],
+  props: ['title', 'portfolio', 'status'],
   components: {
     'allocation-chart': AllocationChart
   },
   data () {
     return {
-      tableFields: ['asset', 'quantityLabel']
+      tableFields: ['asset', 'expectedReturn', 'standardDeviation', 'quantityLabel']
     }
   },
   computed: {
     parametrization () {
-      return ((this.portfolio || {}).parametrization || {}).standardDeviationMillisMaximum
+      return ((this.portfolio || {}).parametrization || {}).standardDeviationMaximumLabel
     },
     allocations () {
       const assetsList = this.portfolio ? this.portfolio.assetClassList : []
       const assetsId = (assetsList || []).reduce((acc, e) => { acc[e.id] = e; return acc }, {})
 
-      const initialAssets = (this.portfolio.assetClassAllocationList || []).map(e => ({
+      return (this.portfolio.assetClassAllocationList || []).map(e => ({
         asset: assetsId[e.assetClassId].name,
-        quantityMillis: e.quantityMillis ? e.quantityMillis : 0,
-        quantityLabel: e.quantityLabel ? e.quantityLabel : '0.0%'}))
-
-      return this.rtAllocations.length === 0 ? initialAssets : this.rtAllocations
+        expectedReturn: assetsId[e.assetClassId].expectedReturnLabel,
+        standardDeviation: assetsId[e.assetClassId].standardDeviationRiskLabel,
+        quantityMillis: e.quantityMillis,
+        quantityLabel: e.quantityLabel}))
     },
     chartAllocations () {
       const colors = Rainbow.create(this.allocations.length).map(c => `rgb(${c.values.rgb.join(', ')})`)
@@ -77,10 +79,13 @@ export default {
       })
     },
     terminateAllocation (evt) {
-
-    },
-    destroySolution (evt) {
-
+      const url = `/api/portfolio/${this.portfolio.id}/terminate`
+      axios.get(url)
+      .then(res => {
+        console.log(res.data)
+      }, error => {
+        console.error(error)
+      })
     }
   }
 }

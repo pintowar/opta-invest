@@ -17,6 +17,7 @@
 package com.github.invest.domain;
 
 import com.github.invest.domain.util.InvestmentNumericUtil;
+import com.github.invest.dto.AssetClassDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -45,14 +47,6 @@ public class AssetClass {
     // Complex methods
     // ************************************************************************
 
-    public String getExpectedReturnLabel() {
-        return InvestmentNumericUtil.formatMillisAsPercentage(expectedReturnMillis);
-    }
-
-    public String getStandardDeviationRiskLabel() {
-        return InvestmentNumericUtil.formatMillisAsPercentage(standardDeviationRiskMillis);
-    }
-
     public String getCorrelationLabel(AssetClass other) {
         long correlationMillis = correlationMillisMap.get(other);
         return InvestmentNumericUtil.formatMillisAsNumber(correlationMillis);
@@ -66,6 +60,14 @@ public class AssetClass {
     public AssetClass clone() {
         return AssetClass.of(id, name, region, sector, expectedReturnMillis, standardDeviationRiskMillis,
                 correlationMillisMap);
+    }
+
+    public AssetClassDTO toDTO() {
+        Map<String, Long> corr = correlationMillisMap.entrySet().stream().collect(Collectors.toMap(
+                it -> it.getKey().toString(), Map.Entry::getValue
+        ));
+        return AssetClassDTO.of(id, name, region.getId(), sector.getId(), expectedReturnMillis,
+                standardDeviationRiskMillis, corr);
     }
 
 }
