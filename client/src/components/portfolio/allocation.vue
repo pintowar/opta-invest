@@ -12,7 +12,18 @@
     </b-row>
     <b-row>
       <b-col cols="6">
-        <p>Maximum Standard Deviation: <b>{{ parametrization }}</b></p>
+        <b-container fluid>
+          <b-row>
+            <b-col sm="6">
+              <label for="input-std">Maximum Standard Deviation:</label>
+            </b-col>
+            <b-col sm="2">
+              <b-input-group size="sm" append="%">
+                <b-form-input id="input-std" v-model.trim="parametrization" :state="paramState" type="text"/>
+              </b-input-group>
+            </b-col>
+          </b-row>
+        </b-container>
         <b-table striped hover :items="allocations" :fields="tableFields"/>
         <p>
           Expected Return: <b>{{ (portfolio || {}).expectedReturnLabel }}</b>,
@@ -43,8 +54,18 @@ export default {
     }
   },
   computed: {
-    parametrization () {
-      return ((this.portfolio || {}).parametrization || {}).standardDeviationMaximumLabel
+    parametrization: {
+      set (newVal) {
+        this.portfolio.parametrization.standardDeviationMaximumLabel = `${newVal}%`
+        this.portfolio.parametrization.standardDeviationMillisMaximum = newVal * 10
+      },
+      get () {
+        return (((this.portfolio || {}).parametrization || {}).standardDeviationMillisMaximum || 0) / 10
+      }
+    },
+    paramState () {
+      const numVal = (((this.portfolio || {}).parametrization || {}).standardDeviationMillisMaximum || 0) / 10
+      return numVal >= 0 && numVal <= 100
     },
     allocations () {
       const assetsList = this.portfolio ? this.portfolio.assetClassList : []
@@ -73,7 +94,7 @@ export default {
       const url = `/api/portfolio/${this.portfolio.id}/async-allocate`
       axios.post(url, this.portfolio)
       .then(res => {
-        this.status = res.data
+        this.$emit('newStatus', res.data)
         console.log(res.data)
       }, error => {
         console.error(error)

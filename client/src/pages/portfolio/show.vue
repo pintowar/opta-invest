@@ -2,7 +2,7 @@
   <b-card no-body>
     <b-tabs card>
       <b-tab title="Allocation" active>
-        <allocation :title="title" :portfolio="portfolio" :status="status"/>
+        <allocation :title="title" :portfolio="portfolio" :status="status" @newStatus="changeStatus" />
       </b-tab>
       <b-tab title="Info">
         <assets :title="title" :portfolio="portfolio" />
@@ -66,6 +66,11 @@ export default {
   },
   beforeDestroy () {
     this.client.disconnect()
+  },
+  methods: {
+    changeStatus (newStatus) {
+      this.status = newStatus
+    }
   }
 }
 </script>

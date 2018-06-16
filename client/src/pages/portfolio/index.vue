@@ -6,7 +6,7 @@
         <router-link :to="{ name: 'portfolio', params: { id: row.value }}">{{row.value}}</router-link>
       </template>
       <template slot="actions" slot-scope="row">
-        <b-button size="sm">
+        <b-button :to="{ name: 'portfolio', params: { id: row.item.id }}" size="sm">
           Details
         </b-button>
       </template>
