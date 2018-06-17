@@ -5,7 +5,7 @@
         <allocation :title="title" :portfolio="portfolio" :status="status" @newStatus="changeStatus" />
       </b-tab>
       <b-tab title="Info">
-        <assets :title="title" :portfolio="portfolio" />
+        <assets :title="title" :portfolio="portfolio" :status="status" />
       </b-tab>
       <b-tab title="Correlation Matrix">
         <corr-matrix :title="title" :portfolio="portfolio" />
@@ -27,7 +27,6 @@ export default {
   data () {
     return {
       title: 'Portfolio ' + this.$route.params.id,
-      rtAllocations: [],
       portfolio: {},
       status: 'NONE'
     }

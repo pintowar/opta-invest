@@ -17,9 +17,9 @@
             <b-col sm="6">
               <label for="input-std">Maximum Standard Deviation:</label>
             </b-col>
-            <b-col sm="2">
+            <b-col sm="3">
               <b-input-group size="sm" append="%">
-                <b-form-input id="input-std" v-model.trim="parametrization" :state="paramState" type="text"/>
+                <b-form-input id="input-std" v-model.trim="parametrization" @change="parametrizationChange" type="number" :disabled="solving"/>
               </b-input-group>
             </b-col>
           </b-row>
@@ -54,6 +54,9 @@ export default {
     }
   },
   computed: {
+    solving () {
+      return this.status === 'SOLVING'
+    },
     parametrization: {
       set (newVal) {
         this.portfolio.parametrization.standardDeviationMaximumLabel = `${newVal}%`
@@ -62,10 +65,6 @@ export default {
       get () {
         return (((this.portfolio || {}).parametrization || {}).standardDeviationMillisMaximum || 0) / 10
       }
-    },
-    paramState () {
-      const numVal = (((this.portfolio || {}).parametrization || {}).standardDeviationMillisMaximum || 0) / 10
-      return numVal >= 0 && numVal <= 100
     },
     allocations () {
       const assetsList = this.portfolio ? this.portfolio.assetClassList : []
@@ -90,6 +89,11 @@ export default {
     }
   },
   methods: {
+    parametrizationChange (idx) {
+      const aux = parseFloat(this.parametrization)
+      const qty = Math.max(Math.min(isNaN(aux) ? 0.0 : aux, 100.0), 0.0)
+      this.parametrization = qty
+    },
     allocateAssets (evt) {
       const url = `/api/portfolio/${this.portfolio.id}/async-allocate`
       axios.post(url, this.portfolio)
