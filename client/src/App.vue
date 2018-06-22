@@ -6,7 +6,11 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item to="/">Portfolios</b-nav-item>
-          <b-nav-item to="/help">Help</b-nav-item>
+          <b-nav-item-dropdown text="Help">
+            <b-dropdown-item to="/optaplanner">Optaplanner</b-dropdown-item>
+            <b-dropdown-item to="/vuejs">Vue.js</b-dropdown-item>
+            <b-dropdown-item to="/boot">Spring Boot</b-dropdown-item>
+          </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

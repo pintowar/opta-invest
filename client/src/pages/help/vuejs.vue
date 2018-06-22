@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="@/assets/logo.png">
+    <img src="@/assets/vue-logo.png">
     <div class="help">
       <h1>{{ msg }}</h1>
       <h2>Essential Links</h2>
@@ -25,10 +25,10 @@
 
 <script>
 export default {
-  name: 'help',
+  name: 'vuejs',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'This is a Vue.js App'
     }
   }
 }

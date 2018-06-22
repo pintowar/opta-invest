@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Help from '@/pages/help/index'
+import Vuejs from '@/pages/help/vuejs'
+import Optaplanner from '@/pages/help/optaplanner'
+import Boot from '@/pages/help/boot'
 import Portfolios from '@/pages/portfolio/index'
 import Portfolio from '@/pages/portfolio/show'
 
@@ -19,9 +21,19 @@ export default new Router({
       component: Portfolio
     },
     {
-      path: '/help',
-      name: 'help',
-      component: Help
+      path: '/vuejs',
+      name: 'vuejs',
+      component: Vuejs
+    },
+    {
+      path: '/optaplanner',
+      name: 'optaplanner',
+      component: Optaplanner
+    },
+    {
+      path: '/boot',
+      name: 'boot',
+      component: Boot
     }
   ]
 })
