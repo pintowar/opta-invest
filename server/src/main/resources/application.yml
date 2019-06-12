@@ -8,10 +8,13 @@ spring:
       write_dates_as_timestamps: false
       write_durations_as_timestamps: false
 
-endpoints:
-  health:
-    sensitive: false
-
 management:
   security:
     enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,metrics,loggers,httptrace,mappings,scheduledtasks,threaddump,heapdump
+  info:
+    git:
+      mode: full

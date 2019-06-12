@@ -1,41 +1,45 @@
 plugins {
-    id "org.springframework.boot" version "2.1.0.RELEASE"
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
-    id "com.gorylenko.gradle-git-properties" version "1.4.17"
+    id "org.springframework.boot" version "2.1.5.RELEASE"
+    id "io.spring.dependency-management" version "1.0.7.RELEASE"
+    id "com.gorylenko.gradle-git-properties" version "2.0.0"
 }
 
 apply plugin: 'java'
-apply plugin: 'idea'
-
-repositories {
-    mavenCentral()
-}
 
 sourceCompatibility = 1.8
 
 bootJar {
-    archiveName = 'app.jar'
+    archiveFileName = rootProject.jarFileName
+}
+
+springBoot {
+    buildInfo()
+}
+
+ext {
+    lombokVersion = '1.18.4'
 }
 
 dependencies {
-    compile "org.optaplanner:optaplanner-core:7.14.0.Final"
+    implementation "org.optaplanner:optaplanner-core:7.22.0.Final"
 
-    compile "org.springframework.boot:spring-boot-actuator"
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-webflux"
-    compile "org.springframework.boot:spring-boot-starter-websocket"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
+    implementation "org.springframework.boot:spring-boot-starter-websocket"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
     compileOnly "org.springframework.boot:spring-boot-devtools"
 
-    compile "com.fasterxml.jackson.core:jackson-annotations"
-    compile "com.fasterxml.jackson.core:jackson-core"
-    compile "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.core:jackson-annotations"
+    implementation "com.fasterxml.jackson.core:jackson-core"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
 //    runtime "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
 //    runtime "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-    runtime 'org.slf4j:jcl-over-slf4j:1.7.25'
+    runtimeOnly 'org.slf4j:jcl-over-slf4j:1.7.25'
 
-    compileOnly 'org.projectlombok:lombok:1.16.20'
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
 gitProperties {

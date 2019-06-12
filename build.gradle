@@ -1,11 +1,14 @@
 plugins {
-    id "com.palantir.docker" version "0.13.0"
-    id "com.palantir.docker-run" version "0.13.0"
+    id "com.palantir.docker" version "0.22.0"
+    id "com.palantir.docker-run" version "0.22.0"
 }
 
+version '0.6.0'
+group 'com.github.pintowar'
+
 subprojects {
-    version '0.5.1'
-    group 'com.github.pintowar'
+    version project.version
+    group project.group
 
     apply plugin: 'idea'
 
@@ -51,18 +54,19 @@ task clean(type: Delete) {
     delete 'build'
 }
 
-task(":server:assemble").mustRunAfter(copyClientResources)
+tasks.getByPath(":server:assemble").mustRunAfter(copyClientResources)
 
 docker {
-    name "pintowar/opta-invest:${project(":server").version}"
-    tags 'latest'
+    name "pintowar/${project.name}:$version"
+    tag 'current', "pintowar/${project.name}:$version"
+    tag 'latest', "pintowar/${project.name}:latest"
     dependsOn tasks.assembleServerAndClient
     files "$rootDir/build/$jarFileName"
 }
 
 dockerRun {
     name 'opta_invest'
-    image "pintowar/opta-invest:${project(":server").version}"
+    image "pintowar/${project.name}:$version"
     ports '8080'
     clean true
     daemonize true
