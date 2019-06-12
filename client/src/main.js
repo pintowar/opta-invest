@@ -10,10 +10,14 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
-new Vue({
+/*new Vue({
   el: '#app',
   router,
   template: '<App/>',
   components: { App }
-})
+})*/
+
+new Vue({
+  router,
+  render: h => h(App),
+}).$mount('#app')
