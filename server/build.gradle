@@ -1,12 +1,12 @@
 plugins {
-    id "org.springframework.boot" version "2.1.5.RELEASE"
-    id "io.spring.dependency-management" version "1.0.7.RELEASE"
+    id "org.springframework.boot" version "2.3.2.RELEASE"
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
 }
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 bootJar {
     archiveFileName = rootProject.jarFileName
@@ -21,7 +21,7 @@ ext {
 }
 
 dependencies {
-    implementation "org.optaplanner:optaplanner-core:7.22.0.Final"
+    implementation "org.optaplanner:optaplanner-core:7.41.0.Final"
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-webflux"
@@ -32,14 +32,17 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-core"
     implementation "com.fasterxml.jackson.core:jackson-databind"
-//    runtime "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
-//    runtime "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     runtimeOnly 'org.slf4j:jcl-over-slf4j:1.7.25'
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 gitProperties {

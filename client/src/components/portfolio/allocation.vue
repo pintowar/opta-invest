@@ -89,12 +89,12 @@ export default {
     }
   },
   methods: {
-    parametrizationChange (idx) {
+    parametrizationChange () {
       const aux = parseFloat(this.parametrization)
       const qty = Math.max(Math.min(isNaN(aux) ? 0.0 : aux, 100.0), 0.0)
       this.parametrization = qty
     },
-    allocateAssets (evt) {
+    allocateAssets () {
       const url = `/api/portfolio/${this.portfolio.id}/async-allocate`
       axios.post(url, this.portfolio)
       .then(res => {
@@ -104,7 +104,7 @@ export default {
         console.error(error)
       })
     },
-    terminateAllocation (evt) {
+    terminateAllocation () {
       const url = `/api/portfolio/${this.portfolio.id}/terminate`
       axios.get(url)
       .then(res => {
