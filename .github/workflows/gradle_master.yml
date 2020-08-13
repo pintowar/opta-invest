@@ -1,5 +1,10 @@
 name: Java CI
-on: [push]
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      # Push events on master branch
+      - master
 jobs:
   gradle_build:
     runs-on: ubuntu-latest

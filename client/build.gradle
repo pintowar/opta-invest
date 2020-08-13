@@ -31,5 +31,5 @@ task clean(type: Delete) {
 task test(type: YarnTask, dependsOn: 'yarn') {
     group = 'verification'
     description = 'Run the client tests'
-    args = ['run', 'test']
+    args = ['run', 'lint']
 }
