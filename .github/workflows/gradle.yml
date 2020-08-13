@@ -1,7 +1,7 @@
 name: Java CI
 on: [push]
 jobs:
-  gradle:
+  gradle_build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -10,13 +10,15 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Log into Dockerhub (optional)
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Running gradle task
         uses: eskatos/gradle-command-action@v1
         with:
           gradle-version: current
-          arguments: clean assembleServerAndClient docker
+          arguments: clean assembleServerAndClient dockerTag dockerTag dockerTagsPush
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: final-jar
+          name: opta-invest jar
           path: build/app.jar

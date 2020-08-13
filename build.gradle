@@ -42,9 +42,8 @@ task assembleServerAndClient(dependsOn: ['copyClientResources', ':server:assembl
         copy {
             from fileTree(dir: "${project(':server').buildDir}/libs/") 
             into "$rootDir/build/"
+            logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
         }
-
-        logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
     }
 }
 
