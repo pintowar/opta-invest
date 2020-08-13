@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     solving () {
-      return this.status === 'SOLVING'
+      return this.status === 'SOLVING_ACTIVE'
     },
     regions () {
       return (this.portfolio ? this.portfolio.regionList || [] : []).map(e => { e.quantity = e.quantityMillisMaximum / 10; return e })

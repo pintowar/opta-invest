@@ -3,7 +3,7 @@ plugins {
     id "com.palantir.docker-run" version "0.22.0"
 }
 
-version '0.6.1'
+version '0.6.6'
 group 'com.github.pintowar'
 
 subprojects {
@@ -23,7 +23,7 @@ ext {
     jarFileName = 'app.jar'
 }
 
-task copyClientResources(dependsOn: ':client:build') { 
+task copyClientResources(dependsOn: ':client:build') {
     group = 'build'
     description = 'Copy client resources into server'
     doLast {
@@ -34,17 +34,16 @@ task copyClientResources(dependsOn: ':client:build') {
     }
 }
 
-task assembleServerAndClient(dependsOn: ['copyClientResources', ':server:assemble']) {  
+task assembleServerAndClient(dependsOn: ['copyClientResources', ':server:assemble']) {
     group = 'build'
     description = 'Build combined server & client JAR'
 
     doLast {
         copy {
-            from fileTree(dir: "${project(':server').buildDir}/libs/") 
+            from fileTree(dir: "${project(':server').buildDir}/libs/")
             into "$rootDir/build/"
+            logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
         }
-
-        logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
     }
 }
 

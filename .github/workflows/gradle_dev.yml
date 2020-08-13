@@ -1,0 +1,26 @@
+name: Java CI
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - 'develop'
+      - 'feature/**'
+      - 'hotfix/**'
+      - 'bugfix/**'
+      - 'release/**'
+      - 'support/**'
+jobs:
+  gradle_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setting up JAVA
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Running gradle task
+        uses: eskatos/gradle-command-action@v1
+        with:
+          gradle-version: current
+          arguments: clean test

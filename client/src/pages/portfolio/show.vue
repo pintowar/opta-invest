@@ -28,7 +28,7 @@ export default {
     return {
       title: 'Portfolio ' + this.$route.params.id,
       portfolio: {},
-      status: 'NONE'
+      status: 'NOT_SOLVING'
     }
   },
   components: {

@@ -18,94 +18,83 @@ package com.github.invest.service.impl;
 
 
 import com.github.invest.domain.InvestmentSolution;
-import com.github.invest.service.InvestmentRepository;
 import com.github.invest.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.optaplanner.core.api.score.Score;
-import org.optaplanner.core.api.solver.Solver;
-import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.api.solver.SolverManager;
+import org.optaplanner.core.api.solver.SolverStatus;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.scheduler.Schedulers;
-import reactor.util.function.Tuple2;
 
 import java.time.Duration;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
 @Service
 public class SolverService {
 
-    private SolverFactory<InvestmentSolution> solverFactory = SolverFactory
-            .createFromXmlResource("com/github/invest/investmentSolverConfig.xml");
-
-    private InvestmentRepository investmentRepository;
     private NotificationService notificationService;
     private ThreadPoolTaskExecutor executor;
+    private SolverManager<InvestmentSolution, Long> solverManager;
+    private ConcurrentMap<Long, InvestmentSolution> investmentIdMap = new ConcurrentHashMap<>();
 
-    public SolverService(InvestmentRepository investmentRepository, NotificationService notificationService,
+    public SolverService(NotificationService notificationService,
+                         SolverManager<InvestmentSolution, Long> solverManager,
                          @Qualifier("taskExecutor") ThreadPoolTaskExecutor executor) {
-        this.investmentRepository = investmentRepository;
         this.notificationService = notificationService;
+        this.solverManager = solverManager;
         this.executor = executor;
     }
 
     public void terminate(Long investmentId) {
-        Solver<InvestmentSolution> solver = investmentRepository.getSolverByInvestmentId(investmentId);
-        if (null != solver) {
-            solver.terminateEarly();
+        if (SolverStatus.SOLVING_ACTIVE.equals(solverManager.getSolverStatus(investmentId))) {
+            InvestmentSolution solution = getInvestmentById(investmentId);
+            if (solution != null) {
+                solverManager.terminateEarly(investmentId);
+                notificationService.notifyInvestmentChange(getStatusByInvestmentId(investmentId), solution);
+            }
         } else {
             throw new IllegalStateException("The investment with id (" + investmentId
                     + ") is not being solved currently.");
         }
     }
 
-    public void terminateAndClean(Long investmentId) {
-        terminate(investmentId);
-        investmentRepository.terminateAndCleanByInvestmentId(investmentId);
-    }
-
     public Flux<ImmutablePair<Long, String>> solve(InvestmentSolution investment) {
         val flux = Flux.<ImmutablePair<Long, String>>create(emitter -> {
-            Solver<InvestmentSolution> solver = solverFactory.buildSolver();
-            solver.addEventListener(event -> {
-                if (event.isEveryProblemFactChangeProcessed()) {
-                    log.info("New best solution found for investment id ({}) is {}.", investment.getId(),
-                            event.getNewBestScore());
-                    emitter.next(ImmutablePair.of(investment.getId(), event.getNewBestScore().toString()));
-                }
+            solverManager.solve(investment.getId(), investment, (it) -> {
+                log.info("New best solution found for investment id ({}) is {}.", investment.getId(),
+                        investment.getScore());
+                emitter.next(ImmutablePair.of(investment.getId(), investment.getScore().toString()));
             });
-            solver.solve(investment);
             emitter.complete();
         }, FluxSink.OverflowStrategy.LATEST).subscribeOn(Schedulers.fromExecutor(executor));
 
         return flux.sample(Duration.ofSeconds(1));
     }
 
-    @Async
     public void asyncSolve(InvestmentSolution investment) {
-        Long investmentId = investment.getId();
-        Solver<InvestmentSolution> solver = solverFactory.buildSolver();
-        investmentRepository.associateSolverToInvestmentId(investmentId, solver);
-        InvestmentSolution sol = null;
-        solver.addEventListener(event -> {
-            if (event.isEveryProblemFactChangeProcessed()) {
-                notificationService.notifyInvestmentChange(event.getNewBestSolution());
-            }
-        });
+        final Long investmentId = investment.getId();
+        solverManager.solveAndListen(
+                investmentId,
+                (it) -> it.equals(investment.getId()) ? investment : null,
+                (it) -> {
+                    investmentIdMap.put(it.getId(), it);
+                    notificationService.notifyInvestmentChange(getStatusByInvestmentId(it.getId()), it);
+                });
+    }
 
-        try {
-            investmentRepository.solveStatusForInvestmentId(investmentId);
-            sol = solver.solve(investment);
-        } finally {
-            investmentRepository.terminateAndCleanByInvestmentId(investmentId);
-            notificationService.notifyInvestmentChange(sol);
-        }
+    public InvestmentSolution getInvestmentById(Long investmentId) {
+        return investmentIdMap.get(investmentId);
+    }
+
+    public SolverStatus getStatusByInvestmentId(Long investmentId) {
+        return solverManager.getSolverStatus(investmentId);
     }
 
 }
