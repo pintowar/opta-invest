@@ -5,11 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.invest.domain.InvestmentSolution;
 import com.github.invest.dto.InvestmentSolutionDTO;
 import com.github.invest.dto.InvestmentStatusDTO;
-import com.github.invest.service.InvestmentRepository;
-import com.github.invest.service.SolverStatus;
 import com.github.invest.service.impl.SolverService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.optaplanner.core.api.solver.SolverStatus;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -27,18 +26,15 @@ import java.util.Optional;
 public class InvestController {
 
     private SolverService solverService;
-    private InvestmentRepository investmentRepository;
     private ObjectMapper mapper;
 
     private Resource resource = new ClassPathResource("./portfolios.json");
-    private TypeReference<List<InvestmentSolutionDTO>> investmentRef = new TypeReference<List<InvestmentSolutionDTO>>() {
+    private TypeReference<List<InvestmentSolutionDTO>> investmentRef = new TypeReference<>() {
     };
 
 
-    public InvestController(SolverService solverService, InvestmentRepository investmentRepository,
-                            ObjectMapper mapper) {
+    public InvestController(SolverService solverService, ObjectMapper mapper) {
         this.solverService = solverService;
-        this.investmentRepository = investmentRepository;
         this.mapper = mapper;
     }
 
@@ -50,8 +46,9 @@ public class InvestController {
 
     @GetMapping(value = "/api/portfolio/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<InvestmentStatusDTO> portfolio(@PathVariable("id") Long id) throws IOException {
-        SolverStatus status = investmentRepository.getStatusByInvestmentId(id);
-        InvestmentSolution invest = investmentRepository.getInvestmentById(id);
+        SolverStatus status = solverService.getStatusByInvestmentId(id);
+        InvestmentSolution invest = solverService.getInvestmentById(id);
+
         if (invest != null) {
             log.info("Found current solution if id {}", invest.getId());
             return Mono.just(InvestmentStatusDTO.of(status, invest.toDTO()));
@@ -78,12 +75,11 @@ public class InvestController {
                                                    @RequestBody InvestmentSolutionDTO solutionDto) {
         if (id != null && id.equals(solutionDto.getId())) {
             try {
-                investmentRepository.scheduledStatusForInvestmentId(id);
                 solverService.asyncSolve(solutionDto.toInvestmentSolution());
             } catch (IllegalStateException e) {
                 log.info(e.getMessage());
             }
-            return ResponseEntity.ok(investmentRepository.getStatusByInvestmentId(solutionDto.getId()));
+            return ResponseEntity.ok(solverService.getStatusByInvestmentId(solutionDto.getId()));
         } else return ResponseEntity.badRequest().build();
     }
 

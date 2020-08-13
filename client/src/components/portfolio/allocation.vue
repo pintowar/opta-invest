@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     solving () {
-      return this.status === 'SOLVING'
+      return this.status === 'SOLVING_ACTIVE'
     },
     parametrization: {
       set (newVal) {

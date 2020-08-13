@@ -21,7 +21,7 @@ ext {
 }
 
 dependencies {
-    implementation "org.optaplanner:optaplanner-core:7.41.0.Final"
+    implementation "org.optaplanner:optaplanner-spring-boot-starter:7.41.0.Final"
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-webflux"

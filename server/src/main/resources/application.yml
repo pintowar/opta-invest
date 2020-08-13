@@ -18,3 +18,6 @@ management:
   info:
     git:
       mode: full
+
+optaplanner:
+  solverConfigXml: com/github/invest/investmentSolverConfig.xml

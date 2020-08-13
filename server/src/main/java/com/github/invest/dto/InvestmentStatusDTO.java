@@ -1,9 +1,9 @@
 package com.github.invest.dto;
 
-import com.github.invest.service.SolverStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.optaplanner.core.api.solver.SolverStatus;
 
 @Data
 @NoArgsConstructor

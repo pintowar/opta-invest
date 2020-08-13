@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:11.0.8-jre-slim
 MAINTAINER Thiago Oliveira <pintowar@gmail.com>
 
 WORKDIR /opt
