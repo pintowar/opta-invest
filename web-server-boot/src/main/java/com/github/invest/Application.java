@@ -1,5 +1,10 @@
 package com.github.invest;
 
+import com.github.invest.domain.InvestmentSolution;
+import com.github.invest.service.NotificationService;
+import com.github.invest.service.impl.SolverService;
+import org.optaplanner.core.api.solver.SolverManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +23,13 @@ public class Application {
         executor.setThreadNamePrefix("InvestmentSolver-");
         executor.initialize();
         return executor;
+    }
+
+    @Bean
+    public SolverService solverService(NotificationService notificationService,
+                                       SolverManager<InvestmentSolution, Long> solverManager,
+                                       @Qualifier("taskExecutor") ThreadPoolTaskExecutor executor) {
+        return new SolverService(notificationService, solverManager, executor);
     }
 
     public static void main(String[] args) {

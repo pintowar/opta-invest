@@ -16,12 +16,9 @@ springBoot {
     buildInfo()
 }
 
-ext {
-    lombokVersion = '1.18.4'
-}
-
 dependencies {
-    implementation "org.optaplanner:optaplanner-spring-boot-starter:7.41.0.Final"
+    implementation project(":solver")
+    implementation "org.optaplanner:optaplanner-spring-boot-starter:$vOptaPlanner"
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-webflux"
@@ -34,8 +31,8 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind"
     runtimeOnly 'org.slf4j:jcl-over-slf4j:1.7.25'
 
-    compileOnly "org.projectlombok:lombok:$lombokVersion"
-    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly "org.projectlombok:lombok:$vLombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$vLombokVersion"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

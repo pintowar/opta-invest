@@ -1,0 +1,22 @@
+apply plugin: 'java-library'
+
+sourceCompatibility = 11
+
+ext {
+    lombokVersion = '1.18.4'
+}
+
+dependencies {
+    implementation "org.optaplanner:optaplanner-core:$vOptaPlanner"
+    implementation "io.projectreactor:reactor-core:$vReactor"
+
+    compileOnly "org.projectlombok:lombok:$vLombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$vLombokVersion"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}

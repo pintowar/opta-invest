@@ -6,6 +6,12 @@ plugins {
 version '0.6.7-SNAPSHOT'
 group 'com.github.pintowar'
 
+ext {
+    vLombokVersion = '1.18.4'
+    vOptaPlanner = '7.41.0.Final'
+    vReactor = '3.3.8.RELEASE'
+}
+
 subprojects {
     version project.version
     group project.group
