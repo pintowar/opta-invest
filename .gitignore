@@ -35,13 +35,14 @@ out/
 ### Gradle ###
 .gradle
 /build/
-/server/build/
-/client/dist/
-/client/node_modules/
-/client/npm-debug.log*
-/client/yarn-debug.log*
-/client/yarn-error.log*
-/client/test/unit/coverage
+/solver/build/
+/web-server-boot/build/
+/web-client/dist/
+/web-client/node_modules/
+/web-client/npm-debug.log*
+/web-client/yarn-debug.log*
+/web-client/yarn-error.log*
+/web-client/test/unit/coverage
 
 # Ignore Gradle GUI config
 gradle-app.setting

@@ -24,9 +24,6 @@ import lombok.val;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.api.solver.SolverStatus;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.scheduler.Schedulers;
@@ -34,19 +31,19 @@ import reactor.core.scheduler.Schedulers;
 import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executor;
 
 @Slf4j
-@Service
 public class SolverService {
 
     private NotificationService notificationService;
-    private ThreadPoolTaskExecutor executor;
+    private Executor executor;
     private SolverManager<InvestmentSolution, Long> solverManager;
     private ConcurrentMap<Long, InvestmentSolution> investmentIdMap = new ConcurrentHashMap<>();
 
     public SolverService(NotificationService notificationService,
                          SolverManager<InvestmentSolution, Long> solverManager,
-                         @Qualifier("taskExecutor") ThreadPoolTaskExecutor executor) {
+                         Executor executor) {
         this.notificationService = notificationService;
         this.solverManager = solverManager;
         this.executor = executor;
