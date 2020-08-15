@@ -24,24 +24,51 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 
+import javax.persistence.*;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @EqualsAndHashCode(exclude = {"correlationMillisMap"})
 public class AssetClass {
 
+    @Id
     @PlanningId
     private Long id;
     private String name;
+
+    @ManyToOne
     private Region region;
+
+    @ManyToOne
     private Sector sector;
+
     private long expectedReturnMillis; // In millis (so multiplied by 1000)
     private long standardDeviationRiskMillis; // In millis (so multiplied by 1000)
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "assets_correlation",
+            joinColumns = {@JoinColumn(name = "asset_class_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "other_asset_class_id", referencedColumnName = "id")})
+    @MapKeyJoinColumn(name = "asset_class_id")
     private Map<AssetClass, Long> correlationMillisMap;
+
+    @ManyToOne
+    private InvestmentSolution investmentSolution;
+
+    public AssetClass(Long id, String name, Region region, Sector sector, long expectedReturnMillis,
+                      long standardDeviationRiskMillis, Map<AssetClass, Long> correlationMillisMap) {
+        this.id = id;
+        this.name = name;
+        this.region = region;
+        this.sector = sector;
+        this.expectedReturnMillis = expectedReturnMillis;
+        this.standardDeviationRiskMillis = standardDeviationRiskMillis;
+        this.correlationMillisMap = correlationMillisMap;
+    }
 
     // ************************************************************************
     // Complex methods
@@ -58,7 +85,7 @@ public class AssetClass {
     }
 
     public AssetClass clone() {
-        return AssetClass.of(id, name, region, sector, expectedReturnMillis, standardDeviationRiskMillis,
+        return new AssetClass(id, name, region, sector, expectedReturnMillis, standardDeviationRiskMillis,
                 correlationMillisMap);
     }
 

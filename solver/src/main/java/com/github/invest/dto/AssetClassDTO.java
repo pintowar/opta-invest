@@ -34,7 +34,7 @@ public class AssetClassDTO {
     }
 
     public AssetClass toAssetClass(Map<Long, Region> regionList, Map<Long, Sector> sectorList) {
-        return AssetClass.of(id, name, regionList.get(regionId), sectorList.get(sectorId), expectedReturnMillis,
+        return new AssetClass(id, name, regionList.get(regionId), sectorList.get(sectorId), expectedReturnMillis,
                 standardDeviationRiskMillis, null);
     }
 

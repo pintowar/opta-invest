@@ -26,6 +26,6 @@ public class AssetClassAllocationDTO {
     }
 
     public AssetClassAllocation toAssetClassAllocation(Map<Long, AssetClass> idAssets) {
-        return AssetClassAllocation.of(id, idAssets.get(assetClassId), quantityMillis);
+        return new AssetClassAllocation(id, idAssets.get(assetClassId), quantityMillis);
     }
 }

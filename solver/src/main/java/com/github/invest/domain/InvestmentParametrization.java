@@ -22,14 +22,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Institutional weightings.
  */
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvestmentParametrization {
 
+    @Id
     @PlanningId
     private Long id;
 

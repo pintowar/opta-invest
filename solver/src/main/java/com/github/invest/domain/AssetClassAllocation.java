@@ -16,7 +16,6 @@
 
 package com.github.invest.domain;
 
-import com.github.invest.domain.util.InvestmentNumericUtil;
 import com.github.invest.dto.AssetClassAllocationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +24,12 @@ import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 @Data
+@Entity
 @PlanningEntity()
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
@@ -42,14 +46,25 @@ public class AssetClassAllocation {
         }
     }
 
+    @Id
     @PlanningId
     private Long id;
 
+    @ManyToOne
     private AssetClass assetClass;
 
     // Planning variables: changes during planning, between score calculations.
     @PlanningVariable(valueRangeProviderRefs = {"quantityMillisRange"})
     private Long quantityMillis; // In millis (so multiplied by 1000)
+
+    @ManyToOne
+    private InvestmentSolution investmentSolution;
+
+    public AssetClassAllocation(Long id, AssetClass assetClass, Long quantityMillis) {
+        this.id = id;
+        this.assetClass = assetClass;
+        this.quantityMillis = quantityMillis;
+    }
 
     // ************************************************************************
     // Complex methods

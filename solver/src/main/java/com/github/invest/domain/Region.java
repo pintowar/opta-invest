@@ -22,15 +22,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Region {
 
+    @Id
     @PlanningId
     private Long id;
     private String name;
     private Long quantityMillisMaximum; // In millis (so multiplied by 1000)
+
+    @ManyToOne
+    private InvestmentSolution investmentSolution;
 
     // ************************************************************************
     // Complex methods

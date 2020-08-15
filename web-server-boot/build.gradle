@@ -24,6 +24,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-webflux"
     implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     compileOnly "org.springframework.boot:spring-boot-devtools"
 
     implementation "com.fasterxml.jackson.core:jackson-annotations"
@@ -31,11 +32,15 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind"
     runtimeOnly 'org.slf4j:jcl-over-slf4j:1.7.25'
 
+    runtimeOnly 'com.h2database:h2'
+
     compileOnly "org.projectlombok:lombok:$vLombokVersion"
     annotationProcessor "org.projectlombok:lombok:$vLombokVersion"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }
 
 test {

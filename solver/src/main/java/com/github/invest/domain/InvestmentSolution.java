@@ -24,41 +24,51 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
-import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
-import org.optaplanner.core.api.domain.solution.PlanningScore;
-import org.optaplanner.core.api.domain.solution.PlanningSolution;
-import org.optaplanner.core.api.domain.solution.drools.ProblemFactCollectionProperty;
-import org.optaplanner.core.api.domain.solution.drools.ProblemFactProperty;
+import org.optaplanner.core.api.domain.solution.*;
 import org.optaplanner.core.api.domain.valuerange.CountableValueRange;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeFactory;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
+@Entity
 @PlanningSolution
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 public class InvestmentSolution {
 
+    @Id
     @PlanningId
     private Long id;
     private String name;
+
+    @ManyToOne
     @ProblemFactProperty
     private InvestmentParametrization parametrization;
+
+    @OneToMany(mappedBy = "investmentSolution")
     @ProblemFactCollectionProperty
     private List<Region> regionList;
+
+    @OneToMany(mappedBy = "investmentSolution")
     @ProblemFactCollectionProperty
     private List<Sector> sectorList;
+
+    @OneToMany(mappedBy = "investmentSolution")
     @ProblemFactCollectionProperty
     private List<AssetClass> assetClassList;
+
+    @OneToMany(mappedBy = "investmentSolution")
     @PlanningEntityCollectionProperty
     private List<AssetClassAllocation> assetClassAllocationList;
+
+    @Transient
     @PlanningScore
     private HardSoftLongScore score;
 
