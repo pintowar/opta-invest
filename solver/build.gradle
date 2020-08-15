@@ -8,7 +8,7 @@ ext {
 
 dependencies {
     implementation "org.optaplanner:optaplanner-core:$vOptaPlanner"
-    implementation "io.projectreactor:reactor-core:$vReactor"
+    compileOnly "io.projectreactor:reactor-core:$vReactor"
 
     compileOnly "org.projectlombok:lombok:$vLombokVersion"
     annotationProcessor "org.projectlombok:lombok:$vLombokVersion"
