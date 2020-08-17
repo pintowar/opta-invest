@@ -15,9 +15,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-import SockJS from 'sockjs-client'
-import Stomp from 'stompjs'
 import CorrMatrix from '@/components/portfolio/matrix.vue'
 import Assets from '@/components/portfolio/assets.vue'
 import Allocation from '@/components/portfolio/allocation.vue'
@@ -28,7 +25,9 @@ export default {
     return {
       title: 'Portfolio ' + this.$route.params.id,
       portfolio: {},
-      status: 'NOT_SOLVING'
+      status: 'NOT_SOLVING',
+      sessionId: null,
+      client: null
     }
   },
   components: {
@@ -39,23 +38,11 @@ export default {
   created () {
     this.portfolioId = Number(this.$route.params.id)
 
-    const socket = new SockJS('/stomp')
-    this.client = Stomp.over(socket)
-    this.client.debug = null
-    let self = this
-    this.client.connect({}, frame => {
-      console.log('Connected: ' + frame)
-      self.client.subscribe('/topic/solution', message => {
-        const data = JSON.parse(message.body)
-        // console.log(data.status)
-        if (data.id === this.portfolioId) {
-          self.status = data.status
-          self.portfolio = data.portfolio
-        }
-      })
+    this.$http.get(`/api/session-id`).then(res => {
+      this.sessionId = res.data
     })
 
-    axios.get(`/api/portfolio/${this.portfolioId}`).then(res => {
+    this.$http.get(`/api/portfolio/${this.portfolioId}`).then(res => {
       this.status = res.data.status
       this.portfolio = res.data.investment
       this.title = `Portfolio ${this.portfolio.name}`
@@ -64,11 +51,37 @@ export default {
     })
   },
   beforeDestroy () {
-    this.client.disconnect()
+    if(this.client != null) {
+      this.client.close()
+      this.client = null
+    }
+  },
+  watch: {
+    sessionId (val) {
+      this.$log.info('Session id: ' + val)
+      this.connect()
+    }
   },
   methods: {
     changeStatus (newStatus) {
       this.status = newStatus
+    },
+    connect () {
+      const self = this
+      if (self.client == null) {
+        self.client = new WebSocket("ws://" + location.host + "/solution/" + this.sessionId)
+        self.client.onopen = function() {
+            self.$log.info("Connected to the web socket")
+        }
+        self.client.onmessage = function(message) {
+            self.$log.info("Got message:")
+            const data = JSON.parse(message.data)
+            if (data.id === self.portfolioId) {
+              self.status = data.status
+              self.portfolio = data.portfolio
+            }
+        };
+      }
     }
   }
 }
