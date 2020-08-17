@@ -7,15 +7,23 @@ import router from './router'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-Vue.use(BootstrapVue)
-Vue.config.productionTip = false
+import axios from 'axios'
+import VueLogger from 'vuejs-logger'
 
-/*new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
-})*/
+Vue.use(BootstrapVue)
+
+Vue.use(VueLogger, {
+  isEnabled: true,
+  logLevel : 'info',
+  stringifyArguments : false,
+  showLogLevel : true,
+  showMethodName : true,
+  separator: '|',
+  showConsoleColors: true
+})
+
+Vue.config.productionTip = false
+Vue.prototype.$http = axios
 
 new Vue({
   router,

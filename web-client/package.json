@@ -13,11 +13,10 @@
     "chart.js": "^2.9.3",
     "color-rainbow": "^0.0.0",
     "core-js": "^3.6.5",
-    "sockjs-client": "^1.5.0",
-    "stompjs": "^2.3.3",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
-    "vue-router": "^3.4.2"
+    "vue-router": "^3.4.2",
+    "vuejs-logger": "^1.5.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",

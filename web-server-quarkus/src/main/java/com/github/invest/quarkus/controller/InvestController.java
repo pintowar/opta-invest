@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Path("/")
+@Path("/api")
 public class InvestController {
 
     private SolverService solverService;
@@ -37,7 +37,7 @@ public class InvestController {
     };
 
     @GET
-    @Path("/api/portfolios")
+    @Path("/portfolios")
     @Produces(MediaType.APPLICATION_JSON)
     public List<InvestmentSolutionDTO> portfolios() throws IOException {
         InputStream is = getClass().getClassLoader().getResourceAsStream(resource);
@@ -45,7 +45,7 @@ public class InvestController {
     }
 
     @GET
-    @Path("/api/portfolio/{id}")
+    @Path("/portfolio/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<InvestmentStatusDTO> portfolio(@PathParam("id") Long id) throws IOException {
         SolverStatus status = solverService.getStatusByInvestmentId(id);
@@ -64,7 +64,7 @@ public class InvestController {
     }
 
     @POST
-    @Path("/api/portfolio/{id}/allocate")
+    @Path("/portfolio/{id}/allocate")
     @Produces(MediaType.APPLICATION_JSON)
     public Multi<ImmutablePair<Long, String>> solve(@PathParam("id") Long id,
                                                     InvestmentSolutionDTO solutionDto) {
@@ -75,7 +75,7 @@ public class InvestController {
     }
 
     @POST
-    @Path("/api/portfolio/{id}/async-allocate")
+    @Path("/portfolio/{id}/async-allocate")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<SolverStatus> asyncSolve(@PathParam("id") Long id,
                                         InvestmentSolutionDTO solutionDto) {
@@ -90,7 +90,7 @@ public class InvestController {
     }
 
     @GET
-    @Path("/api/portfolio/{id}/terminate")
+    @Path("/portfolio/{id}/terminate")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Boolean> terminate(@PathParam("id") Long id) {
         try {

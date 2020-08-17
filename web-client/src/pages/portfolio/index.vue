@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'portfolios',
   data () {
@@ -31,7 +29,7 @@ export default {
     }
   },
   mounted () {
-    axios.get('/api/portfolios').then(res => {
+    this.$http.get('/api/portfolios').then(res => {
       this.items = res.data.map(e => ({id: e.id, name: e.name}))
     }, error => {
       console.error(error)
