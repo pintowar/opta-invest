@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,13 @@ public class InvestController {
     public InvestController(SolverService solverService, ObjectMapper mapper) {
         this.solverService = solverService;
         this.mapper = mapper;
+    }
+
+    @GetMapping(value = "/api/session-id",
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    public String sessionId(HttpServletRequest req) {
+        log.info("Session ID: {}", req.getSession().getId()); // Creates the user session.
+        return req.getSession().getId();
     }
 
     @GetMapping(value = "/api/portfolios", produces = MediaType.APPLICATION_JSON_VALUE)
