@@ -1,29 +1,24 @@
 package com.github.invest.config;
 
+import com.github.invest.service.impl.WebSocketNotification;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @Configuration
-@EnableWebSocketMessageBroker
-class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+@EnableWebSocket
+class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        HttpSessionHandshakeInterceptor inter = new HttpSessionHandshakeInterceptor();
-        inter.setCreateSession(true);
-
-        registry.addEndpoint("/stomp").withSockJS().setInterceptors(inter);
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(solutionNotificationHandler(), "/solution/*")
+                .setAllowedOrigins("*");
     }
 
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic/");
-        registry.setApplicationDestinationPrefixes("/app");
+    @Bean
+    public WebSocketNotification solutionNotificationHandler() {
+        return new WebSocketNotification();
     }
-
 }
-
