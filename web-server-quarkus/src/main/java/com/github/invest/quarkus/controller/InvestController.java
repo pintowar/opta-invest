@@ -9,11 +9,14 @@ import com.github.invest.service.impl.SolverService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.converters.multi.MultiReactorConverters;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.optaplanner.core.api.solver.SolverStatus;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,21 +30,36 @@ public class InvestController {
     private SolverService solverService;
     private ObjectMapper mapper;
 
+    private String resource = "portfolios.json";
+    private TypeReference<List<InvestmentSolutionDTO>> investmentRef = new TypeReference<>() {
+    };
+
+    @Context
+    private HttpServletRequest httpRequest;
+
     public InvestController(SolverService solverService, ObjectMapper mapper) {
         this.solverService = solverService;
         this.mapper = mapper;
     }
 
-    private String resource = "/portfolios.json";
-    private TypeReference<List<InvestmentSolutionDTO>> investmentRef = new TypeReference<>() {
-    };
+    @SneakyThrows
+    private InputStream portfoliosInputStream() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        return cl.getResourceAsStream(resource);
+    }
+
+    @GET
+    @Path("/session-id")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String sessionId() {
+        return httpRequest.getSession().getId();
+    }
 
     @GET
     @Path("/portfolios")
     @Produces(MediaType.APPLICATION_JSON)
     public List<InvestmentSolutionDTO> portfolios() throws IOException {
-        InputStream is = getClass().getClassLoader().getResourceAsStream(resource);
-        return mapper.readValue(is, investmentRef);
+        return mapper.readValue(portfoliosInputStream(), investmentRef);
     }
 
     @GET
@@ -55,8 +73,7 @@ public class InvestController {
             log.info("Found current solution if id {}", invest.getId());
             return Uni.createFrom().item(InvestmentStatusDTO.of(status, invest.toDTO()));
         } else {
-            InputStream is = getClass().getClassLoader().getResourceAsStream(resource);
-            List<InvestmentSolutionDTO> dtos = mapper.readValue(is, investmentRef);
+            List<InvestmentSolutionDTO> dtos = mapper.readValue(portfoliosInputStream(), investmentRef);
             Optional<InvestmentStatusDTO> resp = dtos.stream().filter(it -> id.equals(it.getId()))
                     .map(it -> InvestmentStatusDTO.of(status, it)).findFirst();
             return resp.map(Uni.createFrom()::item).orElseGet(Uni.createFrom()::nothing);

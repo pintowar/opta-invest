@@ -36,17 +36,33 @@ task copyClientResources(dependsOn: ':web-client:build') {
         copy {
             from project(':web-client').buildDir.absolutePath
             into "${project(':web-server-boot').buildDir}/resources/main/public"
+            into "${project(':web-server-quarkus').buildDir}/resources/main/META-INF/resources"
         }
     }
 }
 
-task assembleServerAndClient(dependsOn: ['copyClientResources', ':web-server-boot:assemble']) {
+task assembleBootServerAndClient(dependsOn: ['copyClientResources', ':web-server-boot:assemble']) {
     group = 'build'
     description = 'Build combined server & client JAR'
 
     doLast {
         copy {
             from fileTree(dir: "${project(':web-server-boot').buildDir}/libs/")
+            into "$rootDir/build/"
+            logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
+        }
+    }
+}
+
+task assembleQuarkusServerAndClient(dependsOn: ['copyClientResources', ':web-server-quarkus:quarkusBuildUber']) {
+    group = 'build'
+    description = 'Build combined server & client JAR'
+
+    doLast {
+        copy {
+            from(project(':web-server-quarkus').buildDir) {
+                include '*.jar'
+            }
             into "$rootDir/build/"
             logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
         }
@@ -60,12 +76,13 @@ task clean(type: Delete) {
 }
 
 tasks.getByPath(":web-server-boot:assemble").mustRunAfter(copyClientResources)
+tasks.getByPath(":web-server-quarkus:assemble").mustRunAfter(copyClientResources)
 
 docker {
     name "pintowar/${project.name}:$version"
     tag 'current', "pintowar/${project.name}:$version"
     tag 'latest', "pintowar/${project.name}:latest"
-    dependsOn tasks.assembleServerAndClient
+//    dependsOn tasks.assembleServerAndClient
     files "$rootDir/build/$jarFileName"
 }
 

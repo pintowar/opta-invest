@@ -3,11 +3,6 @@ plugins {
     id "io.quarkus" version "1.7.0.Final"
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 dependencies {
     implementation project(":solver")
     implementation "org.optaplanner:optaplanner-quarkus:$vOptaPlanner"
@@ -18,6 +13,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy-mutiny'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
 
+    implementation 'org.jboss.slf4j:slf4j-jboss-logging'
     implementation 'io.smallrye.reactive:mutiny-reactor'
 
     compileOnly "org.projectlombok:lombok:$vLombokVersion"
@@ -27,9 +23,6 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured'
 }
 
-group 'org.acme'
-version '1.0.0-SNAPSHOT'
-
 compileJava {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'
@@ -37,6 +30,12 @@ compileJava {
 
 compileTestJava {
     options.encoding = 'UTF-8'
+}
+
+tasks.register("quarkusBuildUber", io.quarkus.gradle.tasks.QuarkusBuild) { task ->
+    description("Build Quarkus Uber Jar")
+    group("Quarkus")
+    task.uberJar = true
 }
 
 java {
