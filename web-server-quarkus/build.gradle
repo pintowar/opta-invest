@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id "io.quarkus" version "1.7.0.Final"
+}
+
+version parent.version
+
+dependencies {
+    implementation project(":solver")
+    implementation "org.optaplanner:optaplanner-quarkus:$vOptaPlanner"
+    implementation "org.optaplanner:optaplanner-quarkus-jackson:$vOptaPlanner"
+
+    implementation "io.quarkus:quarkus-undertow-websockets"
+    implementation 'io.quarkus:quarkus-resteasy-jackson'
+    implementation 'io.quarkus:quarkus-resteasy-mutiny'
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+    implementation 'org.jboss.slf4j:slf4j-jboss-logging'
+    implementation 'io.smallrye.reactive:mutiny-reactor'
+
+    compileOnly "org.projectlombok:lombok:$vLombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$vLombokVersion"
+
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured'
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+quarkus {
+    finalName = 'app'
+}
+
+tasks.register("quarkusBuildUber", io.quarkus.gradle.tasks.QuarkusBuild) { task ->
+    description("Build Quarkus Uber Jar")
+    group("Quarkus")
+    task.uberJar = true
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+test {
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}

@@ -1,2 +1,9 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 rootProject.name = 'opta-invest'
-include 'client', 'server'
+include 'solver', 'web-client', 'web-server-boot', 'web-server-quarkus'
