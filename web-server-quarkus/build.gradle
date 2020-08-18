@@ -3,6 +3,8 @@ plugins {
     id "io.quarkus" version "1.7.0.Final"
 }
 
+version parent.version
+
 dependencies {
     implementation project(":solver")
     implementation "org.optaplanner:optaplanner-quarkus:$vOptaPlanner"
@@ -30,6 +32,10 @@ compileJava {
 
 compileTestJava {
     options.encoding = 'UTF-8'
+}
+
+quarkus {
+    finalName = 'app'
 }
 
 tasks.register("quarkusBuildUber", io.quarkus.gradle.tasks.QuarkusBuild) { task ->
