@@ -82,7 +82,7 @@ docker {
     name "pintowar/${project.name}:$version"
     tag 'current', "pintowar/${project.name}:$version"
     tag 'latest', "pintowar/${project.name}:latest"
-//    dependsOn tasks.assembleServerAndClient
+    dependsOn tasks.assembleBootServerAndClient
     files "$rootDir/build/$jarFileName"
 }
 
