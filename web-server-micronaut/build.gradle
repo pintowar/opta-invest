@@ -66,7 +66,7 @@ tasks.withType(JavaCompile) {
             '-parameters',
             // enables incremental compilation
             '-Amicronaut.processing.incremental=true',
-            '-Amicronaut.processing.annotations=com.example.*',
+            '-Amicronaut.processing.annotations=com.github.invest.*',
             "-Amicronaut.processing.group=$project.group",
             "-Amicronaut.processing.module=$project.name",
     ])
