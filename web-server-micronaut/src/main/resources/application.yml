@@ -1,0 +1,18 @@
+micronaut:
+  application:
+    name: webServerMicronaut
+  router:
+    static-resources:
+      public:
+        enabled: true
+        paths: classpath:public
+  metrics:
+    enabled: true
+
+endpoints:
+  all:
+    path: /management
+    sensitive: false
+
+optaplanner:
+  solver-config-xml: com/github/invest/investmentSolverConfig.xml

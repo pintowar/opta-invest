@@ -38,6 +38,7 @@ out/
 /solver/build/
 /web-server-boot/build/
 /web-server-quarkus/build/
+/web-server-micronaut/build/
 /web-client/dist/
 /web-client/node_modules/
 /web-client/npm-debug.log*

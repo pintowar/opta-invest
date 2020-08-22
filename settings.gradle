@@ -6,4 +6,4 @@ pluginManagement {
     }
 }
 rootProject.name = 'opta-invest'
-include 'solver', 'web-client', 'web-server-boot', 'web-server-quarkus'
+include 'solver', 'web-client', 'web-server-boot', 'web-server-quarkus', 'web-server-micronaut'
