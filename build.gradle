@@ -37,6 +37,7 @@ task copyClientResources(dependsOn: ':web-client:build') {
             from project(':web-client').buildDir.absolutePath
             into "${project(':web-server-boot').buildDir}/resources/main/public"
             into "${project(':web-server-quarkus').buildDir}/resources/main/META-INF/resources"
+            into "${project(':web-server-micronaut').buildDir}/resources/main/public"
         }
     }
 }
@@ -63,6 +64,19 @@ task assembleQuarkusServerAndClient(dependsOn: ['copyClientResources', ':web-ser
             from(project(':web-server-quarkus').buildDir) {
                 include '*.jar'
             }
+            into "$rootDir/build/"
+            logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
+        }
+    }
+}
+
+task assembleMnServerAndClient(dependsOn: ['copyClientResources', ':web-server-micronaut:shadowJar']) {
+    group = 'build'
+    description = 'Build combined server & client JAR'
+
+    doLast {
+        copy {
+            from fileTree(dir: "${project(':web-server-micronaut').buildDir}/libs/")
             into "$rootDir/build/"
             logger.quiet "JAR generated at $rootDir/build/. It combines the server and client projects."
         }
