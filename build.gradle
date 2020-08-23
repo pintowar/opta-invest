@@ -3,7 +3,7 @@ plugins {
     id "com.palantir.docker-run" version "0.22.0"
 }
 
-version '0.7.0'
+version '0.7.5'
 group 'com.github.pintowar'
 
 ext {
