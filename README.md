@@ -50,7 +50,7 @@ This task will run both modules on port `3000` and `8080`.
 
 To build a jar that contains both server and client modules assembled on the same app. Just run the task on the root folder:
 
-    gradle assembleServerAndClient
+    gradle assembleBootServerAndClient
 
 ## Docker
 
